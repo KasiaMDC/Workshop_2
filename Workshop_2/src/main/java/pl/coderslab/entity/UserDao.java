@@ -18,5 +18,14 @@ public class UserDao {
     private static final String FIND_ALL_USER_QUERY = "select * from users";
     private static final String DELETE_ALL_USER_QUERY = "delete from users";
 
-
+    public void delete(int userId){
+        try (Connection conn = DbUtil.connectWorkshop2()) {
+            PreparedStatement ps = conn.prepareStatement(DELETE_USER_QUERY);
+            ps.setInt(1, userId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("User couldn't be deleted");
+            e.printStackTrace();
+        }
+    }
 }
