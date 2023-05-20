@@ -69,4 +69,30 @@ public class UserDao {
             e.printStackTrace();
         }
     }
+
+    public User[] findAll() {
+        User user = null;
+        User[] result = new User[0];
+        try (Connection conn = DbUtil.connectWorkshop2()) {
+            PreparedStatement ps = conn.prepareStatement(FIND_ALL_USER_QUERY);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                user = new User();
+                user.setId(rs.getInt("id"));
+                user.setEmail(rs.getString("email"));
+                user.setName(rs.getString("username"));
+                user.setPassword(rs.getString("password"));
+                result = enlargeUserArray(result);
+            }
+        } catch (SQLException e) {
+            System.out.println("User couldn't be found");
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    private User[] enlargeUserArray(User[] result) {
+        result = Arrays.copyOf(result, result.length + 1);
+        return result;
+    }
 }
