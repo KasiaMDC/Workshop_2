@@ -18,5 +18,21 @@ public class UserDao {
     private static final String FIND_ALL_USER_QUERY = "select * from users";
     private static final String DELETE_ALL_USER_QUERY = "delete from users";
 
-
+    public User createNewUser(User user) {
+        try (Connection conn = DbUtil.connectWorkshop2()) {
+            PreparedStatement ps = conn.prepareStatement(CREATE_USER_QUERY, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, user.getEmail());
+            ps.setString(2, user.getName());
+            ps.setString(3, user.getPassword());
+            ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                user.setId(rs.getInt(1));
+            }
+        } catch (SQLException e) {
+            System.out.println("User couldn't be added");
+            e.printStackTrace();
+        }
+        return user;
+    }
 }
