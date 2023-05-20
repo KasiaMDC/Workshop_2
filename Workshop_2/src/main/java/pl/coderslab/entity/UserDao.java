@@ -18,5 +18,17 @@ public class UserDao {
     private static final String FIND_ALL_USER_QUERY = "select * from users";
     private static final String DELETE_ALL_USER_QUERY = "delete from users";
 
-
+    public void updateUser(User user) {
+        try (Connection conn = DbUtil.connectWorkshop2()) {
+            PreparedStatement ps = conn.prepareStatement(UPDATE_USER_QUERY);
+            ps.setString(1, user.getName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPassword());
+            ps.setInt(4, user.getId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("User couldn't be added");
+            e.printStackTrace();
+        }
+    }
 }
