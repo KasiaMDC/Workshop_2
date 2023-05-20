@@ -95,4 +95,15 @@ public class UserDao {
         result = Arrays.copyOf(result, result.length + 1);
         return result;
     }
+
+    public void delete(int userId){
+        try (Connection conn = DbUtil.connectWorkshop2()) {
+            PreparedStatement ps = conn.prepareStatement(DELETE_USER_QUERY);
+            ps.setInt(1, userId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("User couldn't be deleted");
+            e.printStackTrace();
+        }
+    }
 }
